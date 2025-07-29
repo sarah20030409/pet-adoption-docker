@@ -1,0 +1,48 @@
+version: "3.8"
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: System_Manager
+      MYSQL_PASSWORD: 1234
+      MYSQL_DB: Pet_Adoption_DB
+
+    volumes:
+      # Map the host's ./backend folder (including all files and subfolders) to the /app directory in the container.
+      - ./backend:/app
+      
+    depends_on:
+      - mysql
+  
+  mysql:
+    image: mysql:8.4
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: Pet_Adoption_DB
+      MYSQL_USER: System_Manager
+      MYSQL_PASSWORD: 1234
+
+    ports:
+      - 3306:3306
+      
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/db/Pet_Adoption_web_dump.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  mysql_data:
