@@ -13,7 +13,7 @@ This backend project includes:
 
 ### ✅ One Command to Start Everything
 ```bash
-git clone https://github.com/sarah20030409/pet-adoption-docker.git
+git clone --recurse-submodules https://github.com/sarah20030409/pet-adoption-docker.git
 cd pet-adoption-docker
 docker-compose up --build
 ```
