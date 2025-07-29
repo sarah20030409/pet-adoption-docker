@@ -1,13 +1,20 @@
 version: "3.8"
 services:
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - 3000:3000
-    depends_on:
-      - backend
+  mysql:
+    image: mysql:8.4
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: Pet_Adoption_DB
+      MYSQL_USER: System_Manager
+      MYSQL_PASSWORD: 1234
+
+    # ports:
+    #   - 3306:3306
+      
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/db/Pet_Adoption_web_dump.sql:/docker-entrypoint-initdb.d/init.sql
 
   backend:
     build:
@@ -27,22 +34,15 @@ services:
       
     depends_on:
       - mysql
-  
-  mysql:
-    image: mysql:8.4
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: Pet_Adoption_DB
-      MYSQL_USER: System_Manager
-      MYSQL_PASSWORD: 1234
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
-      - 3306:3306
-      
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - ./backend/db/Pet_Adoption_web_dump.sql:/docker-entrypoint-initdb.d/init.sql
+      - 3000:3000
+    depends_on:
+      - backend
 
 volumes:
   mysql_data:
