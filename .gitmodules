@@ -1,0 +1,6 @@
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/sarah20030409/pet-adoption-frontend
+[submodule "backend"]
+	path = backend
+	url = https://github.com/sarah20030409/pet-adoption-backend
